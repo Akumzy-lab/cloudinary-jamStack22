@@ -149,6 +149,7 @@ export default function ChatRoom({ user }: any) {
         roomId: id,
         text: messagetext,
         image: uploadPhoto,
+        video: uploadVideo,
         createdAt: new Date().toISOString(),
         isDefault: false,
         id: uuid(),
