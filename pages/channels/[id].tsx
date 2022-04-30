@@ -9,6 +9,7 @@ import {
   MenuIcon,
   SendIcon,
   SpinnerIcon,
+  VideoUploadIcon,
 } from "../../components/icons/images";
 import { UserComponent } from "../../components/Navigation";
 import axios from "axios";
@@ -22,6 +23,8 @@ import ChatRoomWidget from "../../components/ChatRoomWidget";
 import Script from "next/script";
 import ImageRender from "../../components/ImageRender";
 import Gallery from "../../components/Gallery";
+import VideoUploadWidget from "../../components/VideoUploadWidget";
+import VideoUploadModal from "../../components/VideoUploadModal";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const messageFetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -49,6 +52,11 @@ export default function ChatRoom({ user }: any) {
     height: 0,
     width: 0,
   });
+  const [uploadVideo, setUploadVideo] = useState({
+    videoUrl: "",
+    height: 0,
+    width: 0,
+  });
   const { mutate } = useSWRConfig();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -60,6 +68,7 @@ export default function ChatRoom({ user }: any) {
   const { data: channelDetail, error } = useSWR(`/api/channel/${id}`, fetcher, {
     refreshInterval: 1000,
   });
+
   const { data: channelMessages, error: messageError } = useSWR(
     `/api/messages/${id}`,
     messageFetcher,
@@ -175,6 +184,14 @@ export default function ChatRoom({ user }: any) {
       width: 0,
     });
   };
+
+  function closeVideoModal() {
+    setUploadVideo({
+      videoUrl: "",
+      height: 0,
+      width: 0,
+    });
+  }
   return (
     <div className="flex h-full min-h-screen bg-white-offwhite ">
       <Script
@@ -379,15 +396,17 @@ export default function ChatRoom({ user }: any) {
                 placeholder="write a comment..."
                 className="w-full text-white bg-transparent outline-none "
               />
-
-              <ChatRoomWidget update={setUploadPhoto} />
-              <button
-                disabled={!editorContent.trim() || isMessageLoading}
-                onClick={() => handleSendMessage()}
-                className="flex items-center justify-center w-8 h-8 p-2 text-white hover:rounded-full hover:bg-white hover:text-green-400 "
-              >
-                {isMessageLoading ? <SpinnerIcon /> : <SendIcon />}
-              </button>
+              <div className="flex space-x-1 items-center">
+                <ChatRoomWidget update={setUploadPhoto} />
+                <VideoUploadWidget update={setUploadVideo} />
+                <button
+                  disabled={!editorContent.trim() || isMessageLoading}
+                  onClick={() => handleSendMessage()}
+                  className="flex items-center justify-center w-8 h-8 p-2 text-white hover:rounded-full hover:bg-white hover:text-green-400 "
+                >
+                  {isMessageLoading ? <SpinnerIcon /> : <SendIcon />}
+                </button>
+              </div>
             </div>
           )}
         </footer>
@@ -405,6 +424,12 @@ export default function ChatRoom({ user }: any) {
           onClose={() => setActiveImage(null)}
         />
       )}
+      <VideoUploadModal
+        handleUpload={handleSendMessage}
+        videoUrl={uploadVideo.videoUrl}
+        isOpen={uploadVideo.videoUrl ? true : false}
+        onClose={closeVideoModal}
+      />
     </div>
   );
 }
