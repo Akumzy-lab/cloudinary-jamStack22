@@ -35,7 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponseServerIO) => {
               members: {
                 some: {
                   user: {
-                    id: data.user.userId,
+                    id: +data.user.userId,
                   },
                 },
               },
