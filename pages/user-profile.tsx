@@ -4,8 +4,6 @@ import { getSession } from "next-auth/react";
 import { useState } from "react";
 import { updateUserProfile } from "../services/profile";
 import CloudinaryUploadWidget from "../components/CloudinaryWidget";
-import { cld, getPublicId, reSizeByZoom } from "../utils/utils";
-import { AdvancedImage } from "@cloudinary/react";
 export interface Props {
   user: User;
 }
@@ -42,11 +40,6 @@ export default function EditProfile({ user }: Props) {
       editUserDetails();
     }
   }
-
-  const imagePublicId = getPublicId(userPhoto);
-  const myImage = cld.image(imagePublicId);
-  myImage.resize(reSizeByZoom());
-
   return (
     <div className="bg-white-offwhite min-h-screen h-full">
       <Script
@@ -85,7 +78,11 @@ export default function EditProfile({ user }: Props) {
               Photo
             </span>
             <div className="flex items-center justify-center w-[72px] h-[72px] rounded-lg overflow-hidden border-2 relative">
-              <AdvancedImage cldImg={myImage} />
+              <img
+                className="block w-full h-full"
+                src={userPhoto}
+                alt="user image"
+              />
               <div className="absolute bg-transparent cursor-pointer">
                 {editInfo ? (
                   <CloudinaryUploadWidget update={setUserPhoto} />

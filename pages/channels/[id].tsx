@@ -15,20 +15,13 @@ import axios from "axios";
 import useSWR, { useSWRConfig } from "swr";
 import { useStore } from "../../store/appStore";
 import format from "date-fns/format";
-import {
-  cld,
-  formattedTime,
-  getNumberOfDays,
-  getPublicId,
-  reSizeByZoom,
-} from "../../utils/utils";
+import { formattedTime, getNumberOfDays } from "../../utils/utils";
 import ImageUploadModal from "../../components/ImageUploadModal";
 import { v4 as uuid } from "uuid";
 import ChatRoomWidget from "../../components/ChatRoomWidget";
 import Script from "next/script";
 import ImageRender from "../../components/ImageRender";
 import Gallery from "../../components/Gallery";
-import { AdvancedImage } from "@cloudinary/react";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const messageFetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -182,9 +175,6 @@ export default function ChatRoom({ user }: any) {
       width: 0,
     });
   };
-  const imagePublicId = getPublicId(user?.image);
-  const myImage = cld.image(imagePublicId);
-  myImage.resize(reSizeByZoom());
   return (
     <div className="flex h-full min-h-screen bg-white-offwhite ">
       <Script
@@ -247,7 +237,11 @@ export default function ChatRoom({ user }: any) {
         <div className="flex items-center w-full justify-between h-[60px]  px-[27px] py-[17px] bg-[#0B090C]  ">
           <div className="flex items-center space-x-4">
             <div className="hidden w-8 h-8 overflow-hidden rounded-full md:block">
-              <AdvancedImage cldImg={myImage} />
+              <img
+                src={user?.image}
+                className="block w-full h-full"
+                alt={`${user?.name}'s image`}
+              />
             </div>
             <p className="hidden w-40 text-sm font-bold uppercase truncate text-blue-off-blue md:block text-ellipsis ">
               {user?.name}

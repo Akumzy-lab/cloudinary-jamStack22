@@ -1,5 +1,4 @@
 import { Menu } from "@headlessui/react";
-import Image from "next/image";
 import {
   ArrowDownIcon,
   GroupUserIcon,
@@ -10,8 +9,6 @@ import {
 import { useFloating, shift, offset, flip } from "@floating-ui/react-dom";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { AdvancedImage } from "@cloudinary/react";
-import { cld, getPublicId, reSizeByZoom } from "../utils/utils";
 import CreditModal from "./CreditModal";
 import { useState } from "react";
 
@@ -23,9 +20,6 @@ export const UserComponent = ({ image }: imageProp) => {
     placement: "top-end",
     middleware: [shift(), offset(11), flip()],
   });
-  const imagePublicId = getPublicId(image as string);
-  const myImage = cld.image(imagePublicId);
-  myImage.resize(reSizeByZoom());
   const [open, setOpen] = useState(false);
 
   return (
@@ -36,7 +30,7 @@ export const UserComponent = ({ image }: imageProp) => {
             <ArrowDownIcon />
           </span>
           <div className="block md:hidden rounded-full overflow-hidden w-8 h-8">
-            <AdvancedImage cldImg={myImage} />
+            <img src={image} className="block w-full h-full" alt="user image" />
           </div>
         </Menu.Button>
         <Menu.Items
@@ -93,10 +87,6 @@ export default function Navigation({
   name: string;
   image: string;
 }) {
-  const imagePublicId = getPublicId(image);
-  const myImage = cld.image(imagePublicId);
-  myImage.resize(reSizeByZoom());
-
   return (
     <div className="flex justify-between ">
       <div className="flex items-center space-x-2 w-fit">
@@ -108,7 +98,7 @@ export default function Navigation({
 
       <div className="flex items-center w-fit space-x-4 ">
         <div className="overflow-hidden rounded-full w-8 h-8 hidden md:block">
-          <AdvancedImage cldImg={myImage} />
+          <img src={image} className="block w-full h-full" alt="user image" />
         </div>
         <p className="font-bold text-[#282051] hidden md:block uppercase">
           {name}
