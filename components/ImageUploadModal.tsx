@@ -2,10 +2,8 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { AdvancedImage } from "@cloudinary/react";
 import Editor from "./Editor";
-import { getPublicId } from "../utils/utils";
+import { cld, getPublicId } from "../utils/utils";
 import { limitFit } from "@cloudinary/url-gen/actions/resize";
-import { Cloudinary } from "@cloudinary/url-gen";
-
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,14 +20,6 @@ export default function ImageUploadModal({
 }: ModalProps) {
   const [editorContent, setEditorContent] = useState("");
 
-  const cld = new Cloudinary({
-    cloud: {
-      cloudName: "codewithwhyte",
-    },
-    url: {
-      secure: true,
-    },
-  });
   const imagePublicId = getPublicId(imgUrl);
   const myImage = cld.image(imagePublicId);
   myImage.resize(limitFit().width(320));
@@ -79,7 +69,7 @@ export default function ImageUploadModal({
                   Upload Image
                 </Dialog.Title>
                 <div className="w-full h-[300px] my-4 text-center relative  ">
-                  <div className="w-full h-full flex justify-center ">
+                  <div className="w-auto h-full flex justify-center ">
                     <AdvancedImage cldImg={myImage} />
                   </div>
                 </div>

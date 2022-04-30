@@ -10,6 +10,8 @@ import {
 import { useFloating, shift, offset, flip } from "@floating-ui/react-dom";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { AdvancedImage } from "@cloudinary/react";
+import { cld, getPublicId, reSizeByZoom } from "../utils/utils";
 
 interface imageProp {
   image?: string;
@@ -19,6 +21,9 @@ export const UserComponent = ({ image }: imageProp) => {
     placement: "top-end",
     middleware: [shift(), offset(11), flip()],
   });
+  const imagePublicId = getPublicId(image as string);
+  const myImage = cld.image(imagePublicId);
+  myImage.resize(reSizeByZoom());
 
   return (
     <div>
@@ -28,7 +33,7 @@ export const UserComponent = ({ image }: imageProp) => {
             <ArrowDownIcon />
           </span>
           <div className="block md:hidden rounded-full overflow-hidden w-8 h-8">
-            <img src={image} className="w-full h-full block" alt="user image" />
+            <AdvancedImage cldImg={myImage} />
           </div>
         </Menu.Button>
         <Menu.Items
@@ -78,6 +83,10 @@ export default function Navigation({
   name: string;
   image: string;
 }) {
+  const imagePublicId = getPublicId(image);
+  const myImage = cld.image(imagePublicId);
+  myImage.resize(reSizeByZoom());
+
   return (
     <div className="flex justify-between ">
       <div className="flex items-center w-fit space-x-2">
@@ -89,7 +98,7 @@ export default function Navigation({
 
       <div className="flex items-center w-fit space-x-4 ">
         <div className="overflow-hidden rounded-full w-8 h-8 hidden md:block">
-          <img src={image} className="w-full h-full block" alt="user image" />
+          <AdvancedImage cldImg={myImage} />
         </div>
         <p className="font-bold text-[#282051] hidden md:block uppercase">
           {name}
