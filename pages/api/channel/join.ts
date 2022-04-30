@@ -7,25 +7,31 @@ type Data = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data | any>) {
-  if (req.method !== "GET") {
+  if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not Allowed" })
   }
 
-  const { channelId } = req.query
+  const { userId, channelId } = req.body
 
   try {
-    //retrieve chatroom messages
-    const chatRoomMessages = await prisma.message.findMany({
-      where: {
-        roomId: +channelId as number,
+    const newChannelMember = await prisma.chatRoomMember.create({
+      data: {
+        user: {
+          connect: {
+            id: +userId,
+          },
+        },
+        chatRoom: {
+          connect: {
+            id: +channelId,
+          },
+        },
       },
-      // include: {
-      //   user: true,
-      // },
+      include: {
+        user: true,
+      },
     })
-
-    if (!chatRoomMessages) return res.status(404).json({ message: "channel not found" })
-    return res.status(200).json(chatRoomMessages)
+    return res.status(200).json(newChannelMember)
   } catch (error) {
     console.error(error)
     return res.status(500).json({ message: "something went wrong" })

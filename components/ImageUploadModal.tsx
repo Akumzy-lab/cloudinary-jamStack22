@@ -1,22 +1,21 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
 import { AdvancedImage } from "@cloudinary/react";
 import Editor from "./Editor";
 import { cld, getPublicId } from "../utils/utils";
 import { fill } from "@cloudinary/url-gen/actions/resize";
+import { Fragment, useEffect, useState } from "react";
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   imgUrl: string;
-  handleUpload: () => void;
-  setEditor: (editor: any) => void;
+  handleUpload: (content: string) => void;
 }
 export default function ImageUploadModal({
   onClose,
   isOpen,
   imgUrl,
   handleUpload,
-  setEditor,
 }: ModalProps) {
   const [editorContent, setEditorContent] = useState("");
 
@@ -24,6 +23,9 @@ export default function ImageUploadModal({
   const myImage = cld.image(imagePublicId);
   myImage.resize(fill().width(300).height(300));
 
+  useEffect(() => {
+    setEditorContent("");
+  }, [imgUrl]);
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -71,14 +73,20 @@ export default function ImageUploadModal({
                 <div className="w-auto my-4  h-full flex justify-center ">
                   <AdvancedImage cldImg={myImage} />
                 </div>
-                <div className="rounded-lg w-full mb-4 px-2 py-2 bg-white-cream">
-                  <Editor
-                    setTextEditor={setEditor}
-                    setEditorContent={setEditorContent}
+                <div className="w-full px-2 py-2 mb-4 rounded-lg bg-white-cream">
+                  <input
+                    type={"text"}
+                    value={editorContent}
+                    onChange={({ target }) => setEditorContent(target.value)}
+                    placeholder="write a comment..."
+                    className="w-full text-black bg-transparent outline-none "
                   />
                 </div>
-                <div onClick={handleUpload} className="w-fit mx-auto">
-                  <button className=" bg-green-600 hover:bg-green-800 px-4 py-1 rounded-lg text-white-cream font-medium capitalize">
+                <div
+                  onClick={() => handleUpload(editorContent)}
+                  className="mx-auto w-fit"
+                >
+                  <button className="px-4 py-1 font-medium capitalize bg-green-600 hover:bg-green-800 rounded-lg text-white-cream">
                     upload
                   </button>
                 </div>

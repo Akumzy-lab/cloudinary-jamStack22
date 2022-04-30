@@ -1,5 +1,6 @@
 import { useEditor, EditorContent, Editor as TpEditor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
+import Placeholder from "@tiptap/extension-placeholder"
 
 interface Props {
   setEditorContent: (content: string) => void
@@ -16,6 +17,10 @@ export default function Editor({ setEditorContent, setTextEditor }: Props) {
       StarterKit.configure({
         hardBreak: false,
       }),
+      Placeholder.configure({
+        emptyEditorClass: "text-white",
+        placeholder: "Add a comment...",
+      }),
     ],
     content: "",
     onUpdate: ({ editor }) => {
@@ -27,7 +32,7 @@ export default function Editor({ setEditorContent, setTextEditor }: Props) {
   })
 
   return (
-    <div className="break-words overflow-y-auto w-full  ">
+    <div className="w-full overflow-y-auto break-words ">
       <EditorContent editor={editor} />
     </div>
   )
