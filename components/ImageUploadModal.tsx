@@ -3,7 +3,7 @@ import { Fragment, useState } from "react";
 import { AdvancedImage } from "@cloudinary/react";
 import Editor from "./Editor";
 import { cld, getPublicId } from "../utils/utils";
-import { limitFit } from "@cloudinary/url-gen/actions/resize";
+import { fill } from "@cloudinary/url-gen/actions/resize";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,7 +22,7 @@ export default function ImageUploadModal({
 
   const imagePublicId = getPublicId(imgUrl);
   const myImage = cld.image(imagePublicId);
-  myImage.resize(limitFit().width(320));
+  myImage.resize(fill().width(300).height(300));
 
   return (
     <>
@@ -61,17 +61,15 @@ export default function ImageUploadModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full h-auto max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-[#120F13] shadow-xl rounded-2xl">
+              <div className="inline-block w-full h-auto max-w-md p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-[#120F13] shadow-xl rounded-2xl">
                 <Dialog.Title
                   as="h3"
                   className="leading-6 text-[18px] font-bold text-[#F2F2F2] uppercase text-center"
                 >
                   Upload Image
                 </Dialog.Title>
-                <div className="w-full h-[300px] my-4 text-center relative  ">
-                  <div className="w-auto h-full flex justify-center ">
-                    <AdvancedImage cldImg={myImage} />
-                  </div>
+                <div className="w-auto my-4  h-full flex justify-center ">
+                  <AdvancedImage cldImg={myImage} />
                 </div>
                 <div className="rounded-lg w-full mb-4 px-2 py-2 bg-white-cream">
                   <Editor
@@ -80,7 +78,7 @@ export default function ImageUploadModal({
                   />
                 </div>
                 <div onClick={handleUpload} className="w-fit mx-auto">
-                  <button className=" bg-green-800 px-4 py-1 rounded-lg text-white-cream font-medium capitalize">
+                  <button className=" bg-green-600 hover:bg-green-800 px-4 py-1 rounded-lg text-white-cream font-medium capitalize">
                     upload
                   </button>
                 </div>
