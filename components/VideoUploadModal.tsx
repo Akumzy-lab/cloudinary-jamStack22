@@ -1,7 +1,5 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { AdvancedVideo } from "@cloudinary/react";
-import { Cloudinary } from "@cloudinary/url-gen";
-import Editor from "./Editor";
 import { cld, getPublicId } from "../utils/utils";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 import { byRadius } from "@cloudinary/url-gen/actions/roundCorners";
@@ -29,8 +27,8 @@ export default function VideoUploadModal({
   myVideo
     .resize(
       fill()
-        .width(150)
-        .height(150)
+        .width(300)
+        .height(300)
         .gravity(
           Gravity.autoGravity().autoFocus(AutoFocus.focusOn(FocusOn.faces()))
         )

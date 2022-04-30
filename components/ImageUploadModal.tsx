@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { AdvancedImage } from "@cloudinary/react";
 import Editor from "./Editor";
 import { cld, getPublicId } from "../utils/utils";
-import { fill } from "@cloudinary/url-gen/actions/resize";
+import { fill, limitFit } from "@cloudinary/url-gen/actions/resize";
 import { Fragment, useEffect, useState } from "react";
 
 interface ModalProps {
@@ -21,7 +21,7 @@ export default function ImageUploadModal({
 
   const imagePublicId = getPublicId(imgUrl);
   const myImage = cld.image(imagePublicId);
-  myImage.resize(fill().width(300).height(300));
+  myImage.resize(limitFit().width(300).height(300));
 
   useEffect(() => {
     setEditorContent("");

@@ -198,12 +198,12 @@ export default function ChatRoom({ user }: any) {
         src="https://widget.cloudinary.com/v2.0/global/all.js"
         strategy="beforeInteractive"
       />
-      <div className="w-[324px] bg-[#120F13] text-white hidden md:block ">
+      <div className="w-[324px] bg-[#0B090C] text-white hidden md:block ">
         <div className="w-full h-[60px] px-[27px] py-[17px] boxShadow ">
           <Link href="/channels">
             <div className="flex items-center text-lg font-bold cursor-pointer text-white-light w-fit">
               <LeftArrowIcon />
-              All Channels
+              Channels
             </div>
           </Link>
         </div>
@@ -215,12 +215,12 @@ export default function ChatRoom({ user }: any) {
             {channelDetail && channelDetail.description}
           </p>
           <p className="font-mono text-sm italic font-medium text-blue-off-blue">
-            created by: <span>{channelCreator?.name}</span>
+            channel owner: <span>{channelCreator?.name}</span>
           </p>
         </div>
         <div className="h-[calc(100vh-282px)] mx-[27px] flex flex-col">
           <p className="mb-6 text-lg font-bold uppercase text-white-light">
-            members
+            channel members
           </p>
           <div className="flex-1 overflow-y-auto ">
             {channelMembers &&
@@ -269,7 +269,6 @@ export default function ChatRoom({ user }: any) {
           </div>
         </div>
       </div>
-
       {/* Mobile Menu */}
       {openMenu ? (
         <ChannelRoomsDrawer
@@ -282,8 +281,9 @@ export default function ChatRoom({ user }: any) {
           user={user}
         />
       ) : null}
+
       {/* second screen */}
-      <div className="bg-purple-light-purple flex-1 text-white w-[calc(100vw-324px)] flex flex-col h-screen ">
+      <div className="bg-[#0B090C] flex-1 text-white w-[calc(100vw-324px)] flex flex-col h-screen ">
         <main className="flex flex-col h-[calc(100vh-78px)] ">
           <div className="flex items-center px-4 md:px-0 ">
             <div onClick={menuOpen} className="block cursor-pointer md:hidden">
@@ -301,20 +301,13 @@ export default function ChatRoom({ user }: any) {
               </div>
             ) : null}
           </div>
-          <div className="scroll-bar px-[27px] flex-1 py-10 bg-[#0B090C] overflow-y-auto ">
+          <div className="scroll-bar px-[27px] flex-1 bg-purple-light-purple py-10 overflow-y-auto ">
             {channelMembers &&
               Array.isArray(channelMessages) &&
               channelMessages.map((message: IncommingMessage) => {
-                const { image, name } = getChatMemberInfo(message.userId);
+                const { name } = getChatMemberInfo(message.userId);
                 return (
                   <div key={message.id} className="flex mb-4 space-x-[16px]  ">
-                    <div className="rounded-[7px] w-11 h-11 overflow-hidden hidden md:block">
-                      <img
-                        src={image}
-                        className="block w-full h-full"
-                        alt="user image"
-                      />
-                    </div>
                     <div>
                       <div className="flex items-center space-x-4 text-blue-off-blue ">
                         <span className="text-base font-medium capitalize ">
@@ -338,7 +331,7 @@ export default function ChatRoom({ user }: any) {
                             message.image?.imageUrl
                               ? "max-w-[330px]"
                               : "max-w-2/3"
-                          } ` + "bg-purple-light-purple p-2 rounded-lg"
+                          } ` + "bg-[#0B090C] p-2 rounded-lg"
                         }
                       >
                         <div>
