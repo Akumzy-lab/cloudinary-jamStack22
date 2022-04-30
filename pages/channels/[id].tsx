@@ -221,9 +221,9 @@ export default function ChatRoom({ user }: any) {
               channelMembers.map((member: any) => {
                 return (
                   <div key={member.userId} className="flex items-center w-full mb-3 space-x-3 ">
-                    <div className="w-8 h-8 overflow-hidden border-2 rounded-lg">
+                    {/* <div className="w-8 h-8 overflow-hidden border-2 rounded-lg">
                       <img src={member.user.image} alt={`${member.user.name}'s image`} className="w-full h-full" />
-                    </div>
+                    </div> */}
                     <div
                       className="text-base font-medium capitalize w-fit text-blue-off-blue "
                       title={`${member.user.name}`}
@@ -286,9 +286,9 @@ export default function ChatRoom({ user }: any) {
                 const { image, name } = getChatMemberInfo(message.userId)
                 return (
                   <div key={message.id} className="flex mb-4 space-x-[16px]  ">
-                    <div className="rounded-[7px] w-11 h-11 overflow-hidden hidden md:block">
+                    {/* <div className="rounded-[7px] w-11 h-11 overflow-hidden hidden md:block">
                       <img src={image} className="block w-full h-full" alt="user image" />
-                    </div>
+                    </div> */}
                     <div>
                       <div className="flex items-center space-x-4 text-blue-off-blue ">
                         <span className="text-base font-medium capitalize ">{name}</span>

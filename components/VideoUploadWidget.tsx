@@ -1,17 +1,10 @@
-import React, { Component } from "react";
-import { CameraIcon, VideoUploadIcon } from "./icons/images";
+import React, { Component } from "react"
+import { toast } from "react-toastify"
+import { CameraIcon, VideoUploadIcon } from "./icons/images"
 
 type MyProps = {
-  update: ({
-    videoUrl,
-    height,
-    width,
-  }: {
-    videoUrl: string;
-    height: number;
-    width: number;
-  }) => void;
-};
+  update: ({ videoUrl, height, width }: { videoUrl: string; height: number; width: number }) => void
+}
 
 class VideoUploadWidget extends Component<MyProps> {
   componentDidMount() {
@@ -22,22 +15,26 @@ class VideoUploadWidget extends Component<MyProps> {
       },
       (error: any, result: any) => {
         if (!error && result && result.event === "success") {
+          if (result.info.resource_type === "image") {
+            toast.error("Please upload a video")
+            return
+          }
           this.props.update({
             videoUrl: result.info.secure_url,
             height: result.info.height,
             width: result.info.width,
-          });
-          console.log("new IMGurl", result.info);
+          })
+          console.log("new IMGurl", result.info)
         }
-      }
-    );
+      },
+    )
     document.getElementById("video-icon")?.addEventListener(
       "click",
       function () {
-        myWidget.open();
+        myWidget.open()
       },
-      false
-    );
+      false,
+    )
   }
 
   render() {
@@ -48,8 +45,8 @@ class VideoUploadWidget extends Component<MyProps> {
       >
         <VideoUploadIcon />
       </button>
-    );
+    )
   }
 }
 
-export default VideoUploadWidget;
+export default VideoUploadWidget
