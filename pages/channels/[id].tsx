@@ -25,6 +25,7 @@ import ImageRender from "../../components/ImageRender";
 import Gallery from "../../components/Gallery";
 import VideoUploadWidget from "../../components/VideoUploadWidget";
 import VideoUploadModal from "../../components/VideoUploadModal";
+import VideoRender from "../../components/VideoRender";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 const messageFetcher = (url: string) => axios.get(url).then((res) => res.data);
@@ -40,6 +41,11 @@ interface IncommingMessage {
     width: number;
     height: number;
     imageUrl: string;
+  };
+  video?: {
+    width: number;
+    height: number;
+    videoUrl: string;
   };
   text?: string;
   userId: string;
@@ -64,7 +70,6 @@ export default function ChatRoom({ user }: any) {
   const [openModalMenu, setOpenModalMenu] = useState(false);
   const { id } = router.query;
   const [editorContent, setEditorContent] = useState("");
-  const socket = useStore((state: any) => state.socket);
   const { data: channelDetail, error } = useSWR(`/api/channel/${id}`, fetcher, {
     refreshInterval: 1000,
   });
@@ -80,6 +85,7 @@ export default function ChatRoom({ user }: any) {
   const messageRef = useRef<HTMLDivElement>(null);
   const [isMessageLoading, setIsMessageLoading] = useState<boolean>(false);
   const [activeImage, setActiveImage] = useState<imageObject | null>(null);
+  const [activeVideo, setActiveVideo] = useState<videoObject | null>(null);
   const channelCreator = useMemo(() => {
     return channelMembers
       ? channelMembers.find(
@@ -148,6 +154,7 @@ export default function ChatRoom({ user }: any) {
         channelId: id,
         text: messagetext,
         image: uploadPhoto,
+        video: uploadVideo,
       };
       const message = {
         roomId: id,
@@ -165,6 +172,12 @@ export default function ChatRoom({ user }: any) {
         updateChat(postData, channelMessages),
         options
       );
+
+      setUploadVideo({
+        videoUrl: "",
+        height: 0,
+        width: 0,
+      });
 
       setUploadPhoto({
         imageUrl: "",
@@ -198,7 +211,7 @@ export default function ChatRoom({ user }: any) {
         src="https://widget.cloudinary.com/v2.0/global/all.js"
         strategy="beforeInteractive"
       />
-      <div className="w-[324px] bg-[#0B090C] text-white hidden md:block ">
+      <div className="w-[324px] bg-[#120F13] text-white hidden md:block ">
         <div className="w-full h-[60px] px-[27px] py-[17px] boxShadow ">
           <Link href="/channels">
             <div className="flex items-center text-lg font-bold cursor-pointer text-white-light w-fit">
@@ -230,13 +243,9 @@ export default function ChatRoom({ user }: any) {
                     key={member.userId}
                     className="flex items-center w-full mb-3 space-x-3 "
                   >
-                    <div className="w-8 h-8 overflow-hidden border-2 rounded-lg">
-                      <img
-                        src={member.user.image}
-                        alt={`${member.user.name}'s image`}
-                        className="w-full h-full"
-                      />
-                    </div>
+                    {/* <div className="w-8 h-8 overflow-hidden border-2 rounded-lg">
+                      <img src={member.user.image} alt={`${member.user.name}'s image`} className="w-full h-full" />
+                    </div> */}
                     <div
                       className="text-base font-medium capitalize w-fit text-blue-off-blue "
                       title={`${member.user.name}`}
@@ -345,6 +354,9 @@ export default function ChatRoom({ user }: any) {
                               <ImageRender imageObject={message.image} />
                             </a>
                           ) : null}
+                          {message.video?.videoUrl ? (
+                            <VideoRender videoObject={message.video} />
+                          ) : null}
                           <p className="font-mono text-sm font-normal text-white-light">
                             {message.text}
                           </p>
@@ -389,7 +401,7 @@ export default function ChatRoom({ user }: any) {
                 placeholder="write a comment..."
                 className="w-full text-white bg-transparent outline-none "
               />
-              <div className="flex space-x-1 items-center">
+              <div className="flex items-center space-x-1">
                 <ChatRoomWidget update={setUploadPhoto} />
                 <VideoUploadWidget update={setUploadVideo} />
                 <button

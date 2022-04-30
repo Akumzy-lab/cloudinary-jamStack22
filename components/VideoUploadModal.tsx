@@ -1,5 +1,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { AdvancedVideo } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
+import Editor from "./Editor";
 import { cld, getPublicId } from "../utils/utils";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 import { byRadius } from "@cloudinary/url-gen/actions/roundCorners";
@@ -24,16 +26,15 @@ export default function VideoUploadModal({
 
   const videoPublicId = getPublicId(videoUrl);
   const myVideo = cld.video(videoPublicId);
-  myVideo
-    .resize(
-      fill()
-        .width(300)
-        .height(300)
-        .gravity(
-          Gravity.autoGravity().autoFocus(AutoFocus.focusOn(FocusOn.faces()))
-        )
-    ) // Crop the video, focusing on the faces.
-    .roundCorners(byRadius(20));
+  myVideo.resize(
+    fill()
+      .width(350)
+      .height(350)
+      .gravity(
+        Gravity.autoGravity().autoFocus(AutoFocus.focusOn(FocusOn.faces()))
+      )
+  ); // Crop the video, focusing on the faces.
+
   useEffect(() => {
     setEditorContent("");
   }, [videoUrl]);
@@ -79,9 +80,9 @@ export default function VideoUploadModal({
                   as="h3"
                   className="leading-6 text-[18px] font-bold text-[#F2F2F2] uppercase text-center"
                 >
-                  Upload Image
+                  Upload Video
                 </Dialog.Title>
-                <div className="w-auto my-4  h-full flex justify-center ">
+                <div className="flex justify-center w-auto h-full my-4 ">
                   <AdvancedVideo cldVid={myVideo} controls />
                 </div>
                 <div className="w-full px-2 py-2 mb-4 rounded-lg bg-white-cream">
@@ -97,7 +98,7 @@ export default function VideoUploadModal({
                   onClick={() => handleUpload(editorContent)}
                   className="mx-auto w-fit"
                 >
-                  <button className="px-4 py-1 font-medium capitalize bg-green-600 hover:bg-green-800 rounded-lg text-white-cream">
+                  <button className="px-4 py-1 font-medium capitalize bg-green-600 rounded-lg hover:bg-green-800 text-white-cream">
                     upload
                   </button>
                 </div>
