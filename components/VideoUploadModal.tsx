@@ -1,31 +1,44 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { AdvancedImage } from "@cloudinary/react";
+import { AdvancedVideo } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
 import Editor from "./Editor";
 import { cld, getPublicId } from "../utils/utils";
 import { fill } from "@cloudinary/url-gen/actions/resize";
+import { byRadius } from "@cloudinary/url-gen/actions/roundCorners";
+import { FocusOn } from "@cloudinary/url-gen/qualifiers/focusOn";
+import { Gravity } from "@cloudinary/url-gen/qualifiers";
+import { AutoFocus } from "@cloudinary/url-gen/qualifiers/autoFocus";
 import { Fragment, useEffect, useState } from "react";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  imgUrl: string;
+  videoUrl: string;
   handleUpload: (content: string) => void;
 }
-export default function ImageUploadModal({
+export default function VideoUploadModal({
   onClose,
   isOpen,
-  imgUrl,
+  videoUrl,
   handleUpload,
 }: ModalProps) {
   const [editorContent, setEditorContent] = useState("");
 
-  const imagePublicId = getPublicId(imgUrl);
-  const myImage = cld.image(imagePublicId);
-  myImage.resize(fill().width(300).height(300));
-
+  const videoPublicId = getPublicId(videoUrl);
+  const myVideo = cld.video(videoPublicId);
+  myVideo
+    .resize(
+      fill()
+        .width(150)
+        .height(150)
+        .gravity(
+          Gravity.autoGravity().autoFocus(AutoFocus.focusOn(FocusOn.faces()))
+        )
+    ) // Crop the video, focusing on the faces.
+    .roundCorners(byRadius(20));
   useEffect(() => {
     setEditorContent("");
-  }, [imgUrl]);
+  }, [videoUrl]);
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -71,7 +84,7 @@ export default function ImageUploadModal({
                   Upload Image
                 </Dialog.Title>
                 <div className="w-auto my-4  h-full flex justify-center ">
-                  <AdvancedImage cldImg={myImage} />
+                  <AdvancedVideo cldVid={myVideo} controls />
                 </div>
                 <div className="w-full px-2 py-2 mb-4 rounded-lg bg-white-cream">
                   <input
