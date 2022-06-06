@@ -1,20 +1,26 @@
-import { Menu } from "@headlessui/react"
-import { ArrowDownIcon, GroupUserIcon, LogoIcon, LogoutIcon, UserIcon } from "./icons/images"
-import { useFloating, shift, offset, flip } from "@floating-ui/react-dom"
-import { signOut } from "next-auth/react"
-import Link from "next/link"
-import CreditModal from "./CreditModal"
-import { useState } from "react"
+import { Menu } from "@headlessui/react";
+import {
+  ArrowDownIcon,
+  GroupUserIcon,
+  LogoIcon,
+  LogoutIcon,
+  UserIcon,
+} from "./icons/images";
+import { useFloating, shift, offset, flip } from "@floating-ui/react-dom";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
+import CreditModal from "./CreditModal";
+import { useState } from "react";
 
 interface imageProp {
-  image?: string
+  image?: string;
 }
 export const UserComponent = ({ image }: imageProp) => {
   const { x, y, reference, floating, strategy } = useFloating({
     placement: "top-end",
     middleware: [shift(), offset(11), flip()],
-  })
-  const [open, setOpen] = useState(false)
+  });
+  const [open, setOpen] = useState(false);
 
   return (
     <div>
@@ -52,7 +58,7 @@ export const UserComponent = ({ image }: imageProp) => {
             <Menu.Item>
               <button
                 onClick={() => {
-                  setOpen(true)
+                  setOpen(true);
                 }}
                 className="flex items-center w-full px-2 py-2 space-x-2 text-base font-normal text-gray-900 rounded-md group hover:bg-grey-light hover:bg-gray-400"
               >
@@ -61,17 +67,9 @@ export const UserComponent = ({ image }: imageProp) => {
               </button>
             </Menu.Item>
             <Menu.Item>
-              <Link href={"/youtube"}>
-                <button className="flex items-center w-full px-2 py-2 space-x-2 text-base font-normal text-gray-900 rounded-md group hover:bg-grey-light hover:bg-gray-400">
-                  <GroupUserIcon />
-                  <span>Youtube</span>
-                </button>
-              </Link>
-            </Menu.Item>
-            <Menu.Item>
               <button
                 onClick={() => {
-                  signOut({ callbackUrl: "/" })
+                  signOut({ callbackUrl: "/" });
                 }}
                 className="flex items-center w-full px-2 py-2 space-x-2 text-base font-normal text-gray-900 rounded-md group hover:bg-grey-light hover:bg-gray-400"
               >
@@ -84,10 +82,16 @@ export const UserComponent = ({ image }: imageProp) => {
       </Menu>
       <CreditModal isOpen={open} onClose={() => setOpen(false)} />
     </div>
-  )
-}
+  );
+};
 
-export default function Navigation({ name, image }: { name: string; image: string }) {
+export default function Navigation({
+  name,
+  image,
+}: {
+  name: string;
+  image: string;
+}) {
   return (
     <div className="flex justify-between ">
       <div className="flex items-center space-x-2 w-fit">
@@ -101,9 +105,11 @@ export default function Navigation({ name, image }: { name: string; image: strin
         <div className="hidden w-8 h-8 overflow-hidden rounded-full md:block">
           <img src={image} className="block w-full h-full" alt="user image" />
         </div>
-        <p className="font-bold text-[#282051] hidden md:block uppercase">{name}</p>
+        <p className="font-bold text-[#282051] hidden md:block uppercase">
+          {name}
+        </p>
         <UserComponent image={image} />
       </div>
     </div>
-  )
+  );
 }
