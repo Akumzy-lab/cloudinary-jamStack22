@@ -40,7 +40,7 @@ export default function EditProfile({ user }: Props) {
     }
   }
   return (
-    <div className="bg-white-offwhite min-h-screen h-full">
+    <div className="h-full min-h-screen bg-white-offwhite">
       <div className="px-4 py-2 ">
         <Navigation name={user.name} image={userPhoto} />
       </div>

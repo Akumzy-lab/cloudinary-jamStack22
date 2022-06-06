@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import { google } from "googleapis"
 
 declare global {
   // allow global `var` declarations
@@ -12,3 +13,8 @@ const prisma = global.prisma || new PrismaClient()
 if (process.env.NODE_ENV === "development") global.prisma = prisma
 
 export default prisma
+
+export const youtube = google.youtube({
+  version: "v3",
+  auth: process.env.YOUTUBE_API_KEY,
+})
